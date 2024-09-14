@@ -1,5 +1,17 @@
 package controller 
 
+import "net/http"
+
 func RegisterHandler() {
-    registerHomeHanle()
+    registerHomeHandle()
+    registerMdHandle()
+    registerArchiveHandle()
+    registerCategoryHandle()
+    registerOnlineHandle()
+
+    // FileServer
+    http.Handle("/css/", http.FileServer(http.Dir("resource/web")))
+    http.Handle("/js/", http.FileServer(http.Dir("resource/web")))
+    http.Handle("/img/", http.FileServer(http.Dir("resource/web")))
+
 }

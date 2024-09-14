@@ -8,22 +8,27 @@ import (
     "github.com/ty/kshared/view"
 )
 
-func registerHomeHandle() {
-    http.HandleFunc("/home", handleHome)
+func registerArchiveHandle() {
+    http.HandleFunc("/archive", getArchive)
 }
 
-func handleHome(w http.ResponseWriter, r *http.Request) {
-    // 1 get recent article list
-    infos, err := model.GetLatestArticles()
+
+
+func getArchive(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodGet {
+        w.WriteHeader(http.StatusBadRequest)
+        return
+    }
+
+    infos, err := model.GetTotalArticle()
     if err != nil {
         log.Println(err)
         w.WriteHeader(http.StatusBadRequest)
         return
     }
-    // 2 load template 
-    // 3 write reponse
+
     err = view.ExecuteTmpl(w, &view.TmplArgs{
-        Type: "home",
+        Type: "archive",
         Value: infos,
     })
     if err != nil {

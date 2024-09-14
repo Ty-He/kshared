@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kshared</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- customize css flie -->
+    <link rel="stylesheet" href="../css/custom.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-custom">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"> KShared </a>
+                <p class="navbar-text"><small>一个简单的知识共享平台</small></p>
+            </div>
+            <div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="nav-item active"><a href="#"><span class="glyphicon glyphicon-home"> 首页</span></a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-folder-close"> 归档</span></a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-th-list"> 分类</span></a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-search"> 搜索</span></a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-heart"> 关于</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- banner -->
+        <div class="row">
+            <div class="col-md-12">
+                <img src="../img/banner.png" alt="图床服务已经跑路" class="img-responsive center-block">
+            </div>
+        </div>
+        <div class="separate"></div>
+
+        <!-- 几个分类的缩略图 -->
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img src="../img/network-1.jpg" alt="通用的占位符缩略图">
+                    <div class="caption">
+                        <h3>network</h3>
+                        <p>网络编程(C/C++, Go) 并发编程(异步事件循环 协程)。</p>
+                        <p>
+                            <a href="#" class="btn btn-primary" role="button">
+                                了解更多
+                            </a>
+                            <a href="#" class="btn btn-default" role="button">
+                                按钮
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img src="../img/os-1.jpg" alt="通用的占位符缩略图">
+                    <div class="caption">
+                        <h3>OS</h3>
+                        <p>以xv6(risc-v)为例，学习操作系统的基本原理。</p>
+                        <p>
+                            <a href="#" class="btn btn-primary" role="button">
+                                按钮
+                            </a>
+                            <a href="#" class="btn btn-default" role="button">
+                                按钮
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img src="../img/cppgo.webp" alt="通用的占位符缩略图">
+                    <div class="caption">
+                        <h3>modern pragram language</h3>
+                        <p>现代编程语言的使用。</p>
+                        <p>
+                            <a href="#" class="btn btn-primary" role="button">
+                                按钮
+                            </a>
+                            <a href="#" class="btn btn-default" role="button">
+                                按钮
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img src="../img/algorithm.jpg" alt="通用的占位符缩略图">
+                    <div class="caption">
+                        <h3>algorithm</h3>
+                        <p>一些算法题解，不保证严格数学证明。</p>
+                        <p>
+                            <a href="#" class="btn btn-primary" role="button">
+                                按钮
+                            </a>
+                            <a href="#" class="btn btn-default" role="button">
+                                按钮
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="separate"></div>
+        <!-- 主页显示最新的n个note -->
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 content-custom">
+                <h2>最新内容：</h2>
+                <hr>
+                <table class="table table-striped table-hover table-condensed">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="post-date"> 2020-1-2 </span>
+                                <span class="post-title"><a href="#">asio异步网络IO构建高性能服务器</a></span>
+                            </td>
+                            <td>
+                                <span class="post-author">Written By: ty</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="post-date"> 2020-1-2 </span>
+                                <span class="post-title"><a href="#">asio异步网络IO构建高性能服务器</a></span>
+                            </td>
+                            <td>
+                                <span class="post-author">Written By: ty</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="post-date"> 2020-1-2 </span>
+                                <span class="post-title"><a href="#">asio异步网络IO构建高性能服务器</a></span>
+                            </td>
+                            <td>
+                                <span class="post-author">Written By: ty</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-center"><a href="#" class="text-muted"><b>GitHub</b></a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="../js/index.js"></script>
+</body>
+
+</html>

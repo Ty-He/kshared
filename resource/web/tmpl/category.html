@@ -1,0 +1,28 @@
+{{ define "category" }}
+    <div class="container">
+        {{ range $key, $value := . }}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 content-custom">
+                <h2>{{$key}}：</h2>
+                <hr>
+                <table class="table table-striped table-hover table-condensed">
+                    <tbody>
+                        {{ range $value }}
+                        <tr>
+                            <td>
+                                <span class="post-date"> {{ .UpdateTime }}</span>
+                                <span class="post-title"><a href="/article?id={{ .Id }}">{{ .Title }}</a></span>
+                            </td>
+                            <td>
+                                <span class="post-author"> {{ .Author }} </span>
+                            </td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        <div class="separate"></div>
+        </div>
+        {{ end }}
+    </div>
+{{ end }}

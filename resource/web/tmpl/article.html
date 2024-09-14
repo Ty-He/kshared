@@ -1,0 +1,16 @@
+{{ define "article" }}
+<div class="container" style="min-height: 100vh;">
+    <div class="row">
+        <div class="col-md-8 content-custom invisible" id="content">{{ . }}</div>
+        <!-- 固定定位的TOC -->
+        <div class="col-md-3 col-md-offset-1 text-left hidden-xs hidden-sm">
+            <div class="content-custom directory">
+                <h4 class="text-center">目录</h4>
+                <div id="toc"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="../js/article.js"></script>
+{{ end }}

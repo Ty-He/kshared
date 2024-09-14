@@ -1,0 +1,12 @@
+{
+    "server_name": "kshared",
+    "server_port": 8888,
+    "db": {
+        "user": "root",
+        "pwd": "245869",
+        "ip": "192.168.159.112",
+        "port": 3306 
+    },
+    "group_size": 2,
+    "category": ["Network", "OS", "Program", "Algorithm"]
+}

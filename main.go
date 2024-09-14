@@ -1,20 +1,23 @@
 package main 
 
 import (
+    "fmt"
     "net/http"
 
     "github.com/ty/kshared/controller"
     "github.com/ty/kshared/middleware"
+    "github.com/ty/kshared/conf"
 )
 
 func main() {
     controller.RegisterHandler()
 
     s := http.Server {
-        Addr: "192.168.18.128:8888",
+        Addr: fmt.Sprintf("192.168.18.128:%d", conf.Port()),
         Handler: &middleware.CrosMiddleawre{}, 
     }
 
-    println("Server is running...")
+
+    fmt.Printf("Http server [%s] is running at local port: %d ...\n", conf.ServerName(), conf.Port())
     s.ListenAndServe()
 }
