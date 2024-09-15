@@ -1,156 +1,205 @@
 {{ define "layout" }}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kshared-{{ .Type }}</title>
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
-        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <!-- customize css flie -->
-    <link rel="stylesheet" href="../css/custom.css">
-    {{ if eq .Type "article" }}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>kshared-{{ .Type }}</title>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
+                               integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <!-- customize css flie -->
+        <link rel="stylesheet" href="../css/custom.css">
+        {{ if eq .Type "article" }}
         <link rel="stylesheet" href="../css/loader.css">
-    {{ end }}
-</head>
+        {{ end }}
+    </head>
 
-<body>
-    <nav class="navbar navbar-inverse navbar-custom">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"> KShared </a>
-                <p class="navbar-text"><small>一个简单的知识共享平台</small></p>
+    <body>
+        <nav class="navbar navbar-inverse navbar-custom">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"> KShared </a>
+                    <p class="navbar-text"><small>一个简单的知识共享平台</small></p>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item active"><a href="/home"><span class="glyphicon glyphicon-home"> 首页</span></a></li>
+                        <li><a href="/archive"><span class="glyphicon glyphicon-folder-close"> 归档</span></a></li>
+                        <li><a href="/category"><span class="glyphicon glyphicon-th-list"> 分类</span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-search"> 搜索</span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-heart"> 关于</span></a></li>
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" id="dropdownMenu1"
+                                                                                                     aria-haspopup="true" aria-expanded="true">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                                操作
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#"><span id="status">当前未登录</span></a></li>
+                                <li><a href="#" onclick="openLoginModal()">登录</a></li>
+                                <li><a href="#" onclick="openRegisterModal()">注册</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" onclick="openUploadModal()">扩展-上传文件</a></li>
+                            </ul>
+
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="nav-item active"><a href="/home"><span class="glyphicon glyphicon-home"> 首页</span></a></li>
-                    <li><a href="/archive"><span class="glyphicon glyphicon-folder-close"> 归档</span></a></li>
-                    <li><a href="/category"><span class="glyphicon glyphicon-th-list"> 分类</span></a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-search"> 搜索</span></a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-heart"> 关于</span></a></li>
-                </ul>
-            </div>
+        </nav>
+
+        <!-- 用户信息相关 -->
+        <div class="dropdown" style="margin-left: 1vw;">
         </div>
-    </nav>
 
-    <!-- 用户信息相关 -->
-    <div class="dropdown" style="margin-left: 2vw;">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
-            <span class="glyphicon glyphicon-menu-hamburger"></span>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="#"><span id="status">当前未登录</span></a></li>
-            <li><a href="#" onclick="openLoginModal()">登录</a></li>
-            <li><a href="#" onclick="openRegisterModal()">注册</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">扩展-上传文件</a></li>
-        </ul>
-    </div>
-
-    {{ if eq .Type "home" }}
+        {{ if eq .Type "home" }}
         {{ block "home" .Value }} {{end}}
-    {{ else if eq .Type "article" }}
+        {{ else if eq .Type "article" }}
         {{ block "article" .Value }} {{ end }}
-    {{ else if eq .Type "archive" }}
+        {{ else if eq .Type "archive" }}
         {{ block "archive" .Value }} {{ end }}
-    {{ else if eq .Type "category" }}
+        {{ else if eq .Type "category" }}
         {{ block "category" .Value }} {{ end }}
-    {{ end }}
+        {{ end }}
 
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">登录 请输入: </h4>
-                </div>
-                <div class="modal-body">
-                    <!-- 添加表单 -->
-                    <form action="http://192.168.18.128:8888/login" method="post" class="form-horizontal" role="form" id="loginForm">
-                        <div class="form-group">
-                            <label for="uid" class="col-md-2 control-label">UID</label>
-                            <div class="col-md-8">
-                                <input type="text" name="uid" id="uid" class="form-control">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">登录 请输入: </h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 添加表单 -->
+                        <form action="http://192.168.18.128:8888/login" method="post" class="form-horizontal" role="form" id="loginForm">
+                            <div class="form-group">
+                                <label for="uid" class="col-md-2 control-label">UID</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="uid" id="uid" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="upwd" class="col-md-2 control-label">密码</label>
-                            <div class="col-md-8">
-                                <input type="text" name="upwd" id="upwd" class="form-control">
+                            <div class="form-group">
+                                <label for="upwd" class="col-md-2 control-label">密码</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="upwd" id="upwd" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" onclick="submitLoginModal()">登录</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="submitLoginModal()">登录</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
 
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">注册</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- 添加表单 -->
-                    <form action="http://192.168.18.128:8888/register" method="post" class="form-horizontal" role="form" id="registerForm">
-                        <div class="form-group">
-                            <label for="uname" class="col-md-2 control-label">姓名</label>
-                            <div class="col-md-8">
-                                <input type="text" name="uname" id="uname" class="form-control">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">注册</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 添加表单 -->
+                        <form action="http://192.168.18.128:8888/register" method="post" class="form-horizontal" role="form" id="registerForm">
+                            <div class="form-group">
+                                <label for="uname" class="col-md-2 control-label">姓名</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="uname" id="uname" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="upwd" class="col-md-2 control-label">密码</label>
-                            <div class="col-md-8">
-                                <input type="text" name="upwd" id="upwd" class="form-control">
+                            <div class="form-group">
+                                <label for="upwd" class="col-md-2 control-label">密码</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="upwd" id="upwd" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="uemail" class="col-md-2 control-label">邮箱(可选)</label>
-                            <div class="col-md-8">
-                                <input type="text" name="uemail" id="uemail" class="form-control">
+                            <div class="form-group">
+                                <label for="uemail" class="col-md-2 control-label">邮箱(可选)</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="uemail" id="uemail" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" onclick="submitRegisterModal()">提交</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="submitRegisterModal()">提交</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
 
-    <!-- footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="text-center"><a href="#" class="text-muted"><b>GitHub</b></a></p>
+        <!-- 模态框（Modal） 上传文件 -->
+        <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">上传文件</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 添加表单 -->
+                        <form action="http://192.168.18.128:8888/upload" method="post" class="form-horizontal" role="form" id="uploadForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="atitle" class="col-md-2 control-label">Title</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="atitle" id="atitle" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="atype" class="col-md-2 control-label">Type</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="atype" id="atype" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="alabel" class="col-md-2 control-label">Label</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="alabel" id="alabel" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="uploadfile" class="col-md-2 control-label">File</label>
+                                <div class="col-md-8">
+                                    <input type="file" name="uploadfile" id="uploadfile" class="form-control">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" onclick="submitUploadModal()">提交</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="text-center"><a href="#" class="text-muted"><b>GitHub</b></a></p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="../js/author.js"></script>
-</body>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="../js/author.js"></script>
+    </body>
 
 </html>
 {{ end }}

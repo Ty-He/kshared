@@ -11,7 +11,9 @@ type Author struct {
     Email string // may empty
 }
 
-// verify id and pwd, if err != nil, is valid and will fill a.
+// for login: 
+// verify id and pwd, 
+// if err != nil, is valid and will fill a.
 func (a *Author) IsValid() error {
     query := `select name, email from author where id = ? and pwd = ?;`
     
@@ -32,3 +34,4 @@ func (a *Author) Register() error {
     _, err := db.Exec(query, a.Name, a.Pwd, a.Email)
     return err
 }
+

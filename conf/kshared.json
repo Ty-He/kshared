@@ -4,9 +4,10 @@
     "db": {
         "user": "root",
         "pwd": "245869",
-        "ip": "192.168.159.112",
+        "ip": "192.168.2.112",
         "port": 3306 
     },
     "group_size": 2,
-    "category": ["Network", "OS", "Program", "Algorithm"]
+    "category": ["Network", "OS", "Program", "Algorithm"],
+    "max_recv_file_memory": 512000 
 }

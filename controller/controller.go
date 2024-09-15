@@ -8,6 +8,7 @@ func RegisterHandler() {
     registerArchiveHandle()
     registerCategoryHandle()
     registerOnlineHandle()
+    registerRecvNewMdHandle()
 
     // FileServer
     http.Handle("/css/", http.FileServer(http.Dir("resource/web")))

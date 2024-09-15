@@ -8,8 +8,23 @@
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css"
 </head>
 <body>
+    <!-- 用户信息相关 -->
+    <div class="dropdown" style="margin-left: 2vw;">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="#"><span id="status">当前未登录</span></a></li>
+            <li><a href="#" onclick="openLoginModal()">登录</a></li>
+            <li><a href="#" onclick="openRegisterModal()">注册</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#" onclick="openUploadModal()">扩展-上传文件</a></li>
+        </ul>
+    </div>
     
-    <!-- 模态框（Modal） -->
+    <!-- 模态框（Modal）用户登录 -->
     <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -43,7 +58,7 @@
     </div>
     <!-- /.modal -->
 
-    <!-- 模态框（Modal） -->
+    <!-- 模态框（Modal）新用户注册 -->
     <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -77,6 +92,52 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                     <button type="button" class="btn btn-primary" onclick="submitRegisterModal()">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- 模态框（Modal） 上传文件 -->
+    <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">上传文件</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单 -->
+                    <form action="http://192.168.18.128:8888/upload" method="post" class="form-horizontal" role="form" id="uploadForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="atitle" class="col-md-2 control-label">Title</label>
+                            <div class="col-md-8">
+                                <input type="text" name="atitle" id="atitle" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="atype" class="col-md-2 control-label">Type</label>
+                            <div class="col-md-8">
+                                <input type="text" name="atype" id="atype" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alabel" class="col-md-2 control-label">Label</label>
+                            <div class="col-md-8">
+                                <input type="text" name="alabel" id="alabel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="uploadfile" class="col-md-2 control-label">File</label>
+                            <div class="col-md-8">
+                                <input type="file" name="uploadfile" id="uploadfile" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="submitUploadModal()">提交</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

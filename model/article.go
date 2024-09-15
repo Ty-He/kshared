@@ -2,9 +2,13 @@ package model
 
 import (
     "time"
-    "database/sql"
+    "errors"
+    "strconv"
+
+    "github.com/ty/kshared/conf"
 )
 
+// for operation, if only display, use ArticleItem
 type Article struct {
     Id uint32 
     Title string
@@ -14,78 +18,50 @@ type Article struct {
     AuthorId uint32
 }
 
-type ArticleItem struct {
-    Id uint32
-    Title string 
-    Author string 
-
-    // To be easy, use type of string directly.
-    UpdateTime string 
-}
-
-
-func GetLatestArticles() ([]*ArticleItem, error) {
-    sql := `select article.id, title, name, update_time
-        from article join author on author_id = author.id
-        order by update_time desc
-        limit ?;`
-
-    rows, err := db.Query(sql, lastest)
-    if err != nil {
-        return nil, err 
+// if args are invalid, return nil, err
+func NewArticle(atitle, atype, alabel, authorId string) (*Article, error) {
+    a := &Article{
+        Title: atitle,
+        Type: atype,
+        Label: alabel,
+        UpdateTime: time.Now(),
     }
-    defer rows.Close()
+    if len(atitle) == 0 {
+        return nil, errors.New("NewArticle: Empty title")
+    }
+    if !a.isInCategory() {
+        return nil, errors.New("NewArticle: Type is invalid")
+    }
 
-    return get_items(rows, lastest), nil
-}
-
-func GetTotalArticle() ([]*ArticleItem, error) {
-    sql := `select article.id, title, name, update_time
-        from article join author on author_id = author.id
-        order by update_time desc;`
-
-    rows, err := db.Query(sql)
-    if err != nil {
+    if aid, err := strconv.ParseUint(authorId, 10, 32); err != nil {
         return nil, err
+    } else {
+        a.AuthorId = uint32(aid)
     }
-
-    defer rows.Close()
-
-    return get_items(rows, 0), err
+    
+    return a, nil 
 }
 
-// get a map: category -> items
-func FilterArticleByCategory(category []string) (map[string][]*ArticleItem, error) {
-    query := `select article.id, title, name, update_time
-        from article join author on author_id = author.id
-        where type = ?;`
-    
-    stmt, err := db.Prepare(query);
-    if err != nil {
-        return nil, err
-    }
-    defer stmt.Close()
-    
-    ret := map[string][]*ArticleItem{}
-    for _, c := range category {
-        rows, err := stmt.Query(c)
-        if err != nil {
-            return nil, err
+func (a *Article) isInCategory() bool {
+    c := conf.Category()
+    for i := range c {
+        if a.Type == c[i] {
+            return true
         }
-        defer rows.Close()
-        items := get_items(rows, 0)
-        ret[c] = items
     }
-    return ret, nil
+    return false
 }
 
-// scan field from db, the n is recommended size
-func get_items(rows *sql.Rows, n int) []*ArticleItem {
-    items := make([]*ArticleItem, 0, n)
-    for rows.Next() {
-        a := &ArticleItem{}
-        rows.Scan(&a.Id, &a.Title, &a.Author, &a.UpdateTime)
-        items = append(items, a)
+// if existed, update time; else insert
+// and if !finished, should renew filesystem
+func (a *Article) Insert() error {
+    query := `insert into article (title, type, label, release_time, update_time, author_id) 
+        values (?, ?, ?, ?, ?, ?);`
+    result, err := db.Exec(query, a.Title, a.Type, a.Label, a.UpdateTime, a.UpdateTime, a.AuthorId)
+    if err == nil {
+        // If in there, insert must ok.
+        newId, _ := result.LastInsertId()
+        a.Id = uint32(newId)
     }
-    return items
+    return err
 }

@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "net/http"
+    "log"
 
     "github.com/ty/kshared/controller"
     "github.com/ty/kshared/middleware"
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+    log.SetFlags(log.Lshortfile)
     controller.RegisterHandler()
 
     s := http.Server {

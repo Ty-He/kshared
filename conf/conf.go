@@ -19,6 +19,8 @@ type config struct {
     } `json:"db"`
     GroupSize int `json:"group_size"`
     Category []string `json:"category"`
+    // if uploaded file is more, will write it in disk
+    MaxRecvFileMem int64 `json:"max_recv_file_memory"`
 }
 
 var gconfig config 
@@ -63,4 +65,8 @@ func Category() []string {
     r := make([]string, len(gconfig.Category))
     copy(r, gconfig.Category)
     return r
+}
+
+func MaxRecvFileMem() int64 {
+    return gconfig.MaxRecvFileMem;
 }
