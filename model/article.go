@@ -18,8 +18,8 @@ type Article struct {
     AuthorId uint32
 }
 
-// if args are invalid, return nil, err
-func NewArticle(atitle, atype, alabel, authorId string) (*Article, error) {
+// if args are invalid, return nil, err; used when don't know id
+func NewArticleByItem(atitle, atype, alabel, authorId string) (*Article, error) {
     a := &Article{
         Title: atitle,
         Type: atype,
@@ -33,10 +33,10 @@ func NewArticle(atitle, atype, alabel, authorId string) (*Article, error) {
         return nil, errors.New("NewArticle: Type is invalid")
     }
 
-    if aid, err := strconv.ParseUint(authorId, 10, 32); err != nil {
+    var err error
+    a.AuthorId, err = parseUint32(authorId)
+    if err != nil {
         return nil, err
-    } else {
-        a.AuthorId = uint32(aid)
     }
     
     return a, nil 
@@ -52,7 +52,7 @@ func (a *Article) isInCategory() bool {
     return false
 }
 
-// if existed, update time; else insert
+// if existed, update time; else insert and update a.Id
 // and if !finished, should renew filesystem
 func (a *Article) Insert() error {
     query := `insert into article (title, type, label, release_time, update_time, author_id) 
@@ -64,4 +64,56 @@ func (a *Article) Insert() error {
         a.Id = uint32(newId)
     }
     return err
+}
+
+// when know all filed about article 
+func NewArticleById(id, authorId string) (*Article, error) {
+    a := &Article{
+        UpdateTime: time.Now(),
+    }
+    var err error 
+    a.Id, err = parseUint32(id)
+    if err != nil {
+        return nil, err
+    }
+    a.AuthorId, err = parseUint32(authorId)
+    if err != nil {
+        return nil, err
+    }
+    return a, nil
+}
+
+// have a.Id, update new time
+func (a *Article) Update() error {
+    query := `update article set update_time = ? where id = ? and author_id = ?;`
+    result, err := db.Exec(query, a.UpdateTime, a.Id, a.AuthorId)
+    if err != nil {
+        return err
+    } 
+    if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
+        return errors.New("invalid article id or author_id")
+    }
+    return nil
+}
+
+// Logical delete: type => crash
+func (a *Article) Delete() error {
+    query := `update article set type = ? where id = ? and author_id = ?;`
+    result, err := db.Exec(query, conf.Invisible(), a.Id, a.AuthorId)
+    if err != nil {
+        return err
+    } 
+    if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
+        return errors.New("invalid article id or author_id")
+    }
+    return nil
+}
+
+// string -> uint32
+func parseUint32(s string) (uint32, error) {
+    if n, err := strconv.ParseUint(s, 10, 32); err != nil {
+        return 0, err
+    } else {
+        return uint32(n), nil
+    }
 }

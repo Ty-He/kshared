@@ -13,10 +13,10 @@ func registerMdHandle() {
     http.HandleFunc("/article", handleArticlePage)
     http.HandleFunc("/article_content", handleMd)
 
-    http.HandleFunc("/html", func(w http.ResponseWriter, r *http.Request) {
-        content, _ := os.ReadFile("resource/article/6.md")
-        w.Write(content)
-    })
+    // http.HandleFunc("/html", func(w http.ResponseWriter, r *http.Request) {
+    //     content, _ := os.ReadFile("resource/article/6.md")
+    //     w.Write(content)
+    // })
 }
  
 // response html page
@@ -40,7 +40,7 @@ func handleArticlePage(w http.ResponseWriter, r *http.Request) {
 // this func should not execute template, only response md file for client
 func handleMd(w http.ResponseWriter, r *http.Request) {
     id := r.URL.Query()["id"]
-    if r.Method == http.MethodGet {
+    if r.Method == http.MethodGet || len(id) == 0 {
         content, err := os.ReadFile(fmt.Sprintf("resource/article/%s.md", id[0]))
         if err != nil {
             log.Println(err)

@@ -9,7 +9,7 @@ import (
 )
 
 func registerHomeHandle() {
-    http.HandleFunc("/home", handleHome)
+    http.HandleFunc("/", handleHome)
 }
 
 func handleHome(w http.ResponseWriter, r *http.Request) {

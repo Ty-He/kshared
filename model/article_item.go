@@ -2,6 +2,7 @@ package model
 
 import (
     "database/sql"
+    "github.com/ty/kshared/conf"
 )
 
 
@@ -19,10 +20,11 @@ type ArticleItem struct {
 func GetLatestArticles() ([]*ArticleItem, error) {
     sql := `select article.id, title, name, update_time
         from article join author on author_id = author.id
+        where type != ?
         order by update_time desc
         limit ?;`
 
-    rows, err := db.Query(sql, lastest)
+    rows, err := db.Query(sql, conf.Invisible(), lastest)
     if err != nil {
         return nil, err 
     }
@@ -34,9 +36,10 @@ func GetLatestArticles() ([]*ArticleItem, error) {
 func GetTotalArticle() ([]*ArticleItem, error) {
     sql := `select article.id, title, name, update_time
         from article join author on author_id = author.id
+        where type != ?
         order by update_time desc;`
 
-    rows, err := db.Query(sql)
+    rows, err := db.Query(sql, conf.Invisible())
     if err != nil {
         return nil, err
     }

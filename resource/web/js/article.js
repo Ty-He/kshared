@@ -1,7 +1,7 @@
-
 // when article loading, fecth md file from server.
 document.addEventListener('DOMContentLoaded', async () => {
     let query = $('#content').text();
+    // console.log(query)
     document.getElementById('content').innerHTML = '';
 
     document.getElementById('content').classList.add('boxLoading');
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('content').innerHTML = marked.parse(content); 
     generate_toc(document.getElementById('content'), document.getElementById('toc'));
 });
+
 
 // search all <h> in content, 
 // then generate toc and set to dest

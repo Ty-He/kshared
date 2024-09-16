@@ -9,7 +9,7 @@
 </head>
 <body>
     <!-- 用户信息相关 -->
-    <div class="dropdown" style="margin-left: 2vw;">
+    <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
             <span class="glyphicon glyphicon-menu-hamburger"></span>
@@ -21,6 +21,7 @@
             <li><a href="#" onclick="openRegisterModal()">注册</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="#" onclick="openUploadModal()">扩展-上传文件</a></li>
+            <li><a href="#" onclick="openUpdateModal()">扩展-更新文件</a></li>
         </ul>
     </div>
     
@@ -144,6 +145,33 @@
     </div>
     <!-- /.modal -->
 
+    <!-- 模态框（Modal） 更新文件 -->
+    <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">上传文件</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 添加表单 -->
+                    <form action="http://192.168.18.128:8888/upload" method="post" class="form-horizontal" role="form" id="updateForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="updatefile" class="col-md-2 control-label">RenewFile</label>
+                            <div class="col-md-8">
+                                <input type="file" name="updatefile" id="updatefile" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="submitUpdateModal()">提交</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="../js/author.js"></script>

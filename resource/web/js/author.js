@@ -80,3 +80,49 @@ function submitUploadModal() {
 //     uploadForm.submit();
 //     uploadForm.reset(); // clear
 // });
+
+// update file
+
+function openUpdateModal() {
+    $('#update').modal('show');
+    return false;
+}
+
+// request: update a article
+async function updateArticle(formData) {
+    // query = '' if lack query str
+    let query = window.location.search; // include '?'
+    let res = await fetch(`/update${query}`, {
+        method: 'POST',
+        body: formData,
+    });
+    if (!res.ok) {
+        alert('Bad Requst!');
+    } else {
+        document.getElementById('home').click();
+        alert('Update article ok!');
+    }
+}
+
+function submitUpdateModal() {
+    // document.getElementById('updateForm').submit();
+    // override form submit:
+    updateArticle(new FormData(document.getElementById('updateForm')));
+    document.getElementById('updateForm').reset();  
+    $('#update').modal('hide');
+}
+
+// delete file
+async function deleteCurrentArticle() {
+    let query = window.location.search; // include '?'
+    let res = await fetch(`/delete${query}`, {
+        method: 'DELETE',
+    });
+    if (!res.ok) {
+        alert('Bad Requst!');
+    } else {
+        alert('Delete article ok!');
+        // return home
+        document.getElementById('home').click();
+    }
+}

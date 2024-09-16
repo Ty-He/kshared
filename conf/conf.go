@@ -21,6 +21,9 @@ type config struct {
     Category []string `json:"category"`
     // if uploaded file is more, will write it in disk
     MaxRecvFileMem int64 `json:"max_recv_file_memory"`
+
+    // logical delete, set type = invisible
+    Invisible string `json:"invisible"`
 }
 
 var gconfig config 
@@ -53,7 +56,8 @@ func GroupSize() int {
 }
 
 func Dsn() string {
-    return fmt.Sprintf("%s:%s@tcp(%s:%d)/kshared", 
+    // Local time
+    return fmt.Sprintf("%s:%s@tcp(%s:%d)/kshared?loc=Local", 
         gconfig.DB.User,
         gconfig.DB.Pwd,
         gconfig.DB.Ip,
@@ -69,4 +73,8 @@ func Category() []string {
 
 func MaxRecvFileMem() int64 {
     return gconfig.MaxRecvFileMem;
+}
+
+func Invisible() string {
+    return gconfig.Invisible
 }
