@@ -85,13 +85,13 @@ li:hover {
     margin-bottom: 2em;
 }
 
-.directory {
-    /* 定位和大小 */
-    position: fixed;
-    height: 75vh;
-    width: 20vw;
-    overflow-y: auto;
-}
+/* .directory { */
+/*     [> 定位和大小 <] */
+/*     position: fixed; */
+/*     height: 75vh; */
+/*     width: 20vw; */
+/*     overflow-y: auto; */
+/* } */
 
 /* Webkit 浏览器（Chrome、Safari）*/
 ::-webkit-scrollbar {
