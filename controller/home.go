@@ -12,6 +12,7 @@ func registerHomeHandle() {
     http.HandleFunc("/", handleHome)
 }
 
+// this func should allow all method
 func handleHome(w http.ResponseWriter, r *http.Request) {
     // 1 get recent article list
     infos, err := model.GetLatestArticles()

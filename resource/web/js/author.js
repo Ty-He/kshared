@@ -126,3 +126,20 @@ async function deleteCurrentArticle() {
         document.getElementById('home').click();
     }
 }
+
+// search 
+async function searchByTag() {
+    const tag = window.prompt("Search by a tag. Don't input more tags.");
+    if (tag == null) return;
+
+    const res = await fetch(`/search?tag=${tag}`);
+    if (!res.ok) {
+        alert('Bad Requst!');
+        return
+    }
+
+    const html = await res.text();
+    document.open();
+    document.write(html);
+    document.close();
+}

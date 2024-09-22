@@ -1,6 +1,7 @@
 package model
 
 import (
+    "fmt"
     "time"
     "errors"
     "strconv"
@@ -20,6 +21,12 @@ type Article struct {
 
 // if args are invalid, return nil, err; used when don't know id
 func NewArticleByItem(atitle, atype, alabel, authorId string) (*Article, error) {
+    for _, r := range alabel {
+        if r > 255 {
+            return nil, errors.New("NewArticle: Invalid label")
+        }
+    }
+
     a := &Article{
         Title: atitle,
         Type: atype,
@@ -55,15 +62,50 @@ func (a *Article) isInCategory() bool {
 // if existed, update time; else insert and update a.Id
 // and if !finished, should renew filesystem
 func (a *Article) Insert() error {
+    tx, err := db.Begin()
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
     query := `insert into article (title, type, label, release_time, update_time, author_id) 
         values (?, ?, ?, ?, ?, ?);`
-    result, err := db.Exec(query, a.Title, a.Type, a.Label, a.UpdateTime, a.UpdateTime, a.AuthorId)
+    result, err := tx.Exec(query, a.Title, a.Type, a.Label, a.UpdateTime, a.UpdateTime, a.AuthorId)
     if err == nil {
         // If in there, insert must ok.
         newId, _ := result.LastInsertId()
         a.Id = uint32(newId)
+    } else {
+        tx.Rollback()
+        return err
     }
-    return err
+
+    t := newTag(a.Label)
+    ids, err := t.tryInsertAll(tx)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+    query = fmt.Sprintf("insert into article_tag (article_id, tag_id) values (%d, ?);", a.Id)
+    stmt, err := tx.Prepare(query)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+    defer stmt.Close()
+
+    for _, tag_id := range ids {
+        if _, err := stmt.Exec(tag_id); err != nil {
+            tx.Rollback()
+            return err
+        } 
+    }
+
+    if err := tx.Commit(); err != nil {
+        tx.Rollback()
+        return err
+    }
+    return nil
 }
 
 // when know all filed about article 

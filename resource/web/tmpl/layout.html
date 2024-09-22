@@ -28,7 +28,7 @@
                         <li class="nav-item active"><a href="/home" id="home"><span class="glyphicon glyphicon-home"> 首页</span></a></li>
                         <li><a href="/archive"><span class="glyphicon glyphicon-folder-close"> 归档</span></a></li>
                         <li><a href="/category"><span class="glyphicon glyphicon-th-list"> 分类</span></a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-search"> 搜索</span></a></li>
+                        <li><a href="#" onclick="searchByTag()"><span class="glyphicon glyphicon-search"> 搜索</span></a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-heart"> 关于</span></a></li>
                         <li role="presentation" class="dropdown">
                             <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" id="dropdownMenu1"
@@ -45,6 +45,7 @@
                                 <li><a href="#" onclick="openUploadModal()">扩展-上传文件</a></li>
                                 <li><a href="#" onclick="openUpdateModal()">扩展-更新文件</a></li>
                                 <li><a href="#" onclick="deleteCurrentArticle()">扩展-删除文件</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#notificationModal">扩展-查看通知</a></li>
                             </ul>
 
                         </li>
@@ -65,6 +66,8 @@
         {{ block "archive" .Value }} {{ end }}
         {{ else if eq .Type "category" }}
         {{ block "category" .Value }} {{ end }}
+        {{ else if eq .Type "tag" }}
+        {{ block "tag" .Value }} {{ end }}
         {{ end }}
 
         <!-- 模态框（Modal） -->
@@ -215,6 +218,30 @@
         </div>
         <!-- /.modal -->
 
+    <!-- 模态框 -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">最新通知</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="media-list" id="notify-items">
+                        <!-- li标签请求时js动态创建 -->
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="fetchNotify()">刷新</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+
         <!-- footer -->
         <footer class="footer">
             <div class="container">
@@ -229,6 +256,7 @@
         <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="../js/author.js"></script>
+        <script src="../js/notify.js"></script>
     </body>
 
 </html>

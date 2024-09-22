@@ -2,7 +2,7 @@ package model
 
 import (
     "time"
-    "errors"
+    "fmt"
 )
 
 type Comment struct {
@@ -60,12 +60,42 @@ func NewCommentForGet(id, article_id string) (*Comment, error){
 // insert self to db
 func (c *Comment) Insert() error {
     if !c.valid_ref() {
-        return errors.New("invalid pid")
+        return fmt.Errorf("invalid pid: pid = %d", c.Pid)
+    }
+    tx, err := db.Begin()
+    if err != nil {
+        tx.Rollback()
+        return err
     }
     query := `insert into comment (pid, article_id, sender_id, content, release_time) values 
         (?, ?, ?, ?, ?);`
-    _, err := db.Exec(query, c.Pid, c.Article_id, c.Sender_id, *c.Content, c.Release)
-    return err
+    res, err := tx.Exec(query, c.Pid, c.Article_id, c.Sender_id, *c.Content, c.Release)
+    if err != nil {
+        tx.Rollback()
+        return err
+    } else {
+        if id, err := res.LastInsertId(); err != nil {
+            tx.Rollback()
+            return err
+        } else {
+            c.Id = uint32(id)
+        }
+    }
+    n, err := newNotify(c.Pid, c.Article_id, c.Sender_id, c.Id)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+    if err := n.insert(tx); err != nil {
+        tx.Rollback()
+        return err
+    }
+    if err := tx.Commit(); err != nil {
+        tx.Rollback()
+        return err
+    }
+    return nil
 }
 
 
@@ -108,7 +138,8 @@ func (c *Comment) valid_ref() bool {
     }
     query := `select 1 from comment where id = ?;`
     row := db.QueryRow(query, c.Pid)
-    if err := row.Scan(); err != nil {
+    var not_used int
+    if err := row.Scan(&not_used); err != nil {
         return false
     }
     return true

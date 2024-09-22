@@ -11,8 +11,12 @@
 var current_sending_btn;
 function openSendingModal(event) 
 {
-    $('#sending_modal').modal('show');
-    current_sending_btn = event.target;
+    if (isLogin()) {
+        $('#sending_modal').modal('show');
+        current_sending_btn = event.target;
+    } else {
+        alert('当前未登录！');
+    }
     event.preventDefault(); 
     // event.stopPropagation()
 }
@@ -85,7 +89,10 @@ async function fetchComment(event) {
     // let data = await res.json();
     // let comments = JSON.parse(data);
     const comments = await res.json();
-    // create a <ul> after p
+    if (comments.length == 0) {
+        return;
+    }
+    // create a <ul> after span
     const comments_ul = document.createElement('ul');
     comments_ul.className = 'media-list';
     comments.forEach(comment => {
@@ -96,7 +103,7 @@ async function fetchComment(event) {
         // left
         const left = document.createElement('div');
         left.className = 'media-left';
-        left.innerHTML = `<div class="media-object">${comment.sender}</div>`
+        left.innerHTML = `<div class="media-object">${comment.sender}</div>`;
 
         // body
         const body = document.createElement('div');
@@ -111,8 +118,8 @@ async function fetchComment(event) {
                 &emsp13;
                 <a herf="#" onclick="fetchComment(event)"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
             </div>`;
-        const content = document.createElement('p');
-        content.textContent = comment.content;
+        const content = document.createElement('span');
+        content.innerHTML = marked.parse(comment.content);
 
         body.appendChild(heading);
         body.appendChild(content);
@@ -122,12 +129,26 @@ async function fetchComment(event) {
 
         comments_ul.appendChild(comment_li);
     });
+    // <media-body>
     const nextCommentParent = event.target.parentElement.parentElement.parentElement.parentElement;
+
+    const old_ul = nextCommentParent.querySelector('ul.media-list');
+    if (old_ul) nextCommentParent.removeChild(old_ul);
+
     nextCommentParent.appendChild(comments_ul);
 
+    // call once => bad: may be call more than one for the new comment
+    // event.target.parentElement.removeAttribute('onclick');
+    
     event.preventDefault(); 
 }
 
 function CommentElement(cur_elem) {
     return cur_elem.parentElement.parentElement.parentElement.parentElement.parentElement;
+}
+
+function isLogin() {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; uid=`);
+    return parts.length == 2;
 }

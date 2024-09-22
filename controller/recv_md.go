@@ -73,6 +73,6 @@ func RecvNewMdFile(w http.ResponseWriter, r *http.Request) {
     t.Save(a.Id)
 
     // response home
-    handleHome(w, r)
+    handleHome(w, r) // Oh! Cao
 }
 

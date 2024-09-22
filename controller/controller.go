@@ -12,6 +12,8 @@ func RegisterHandler() {
     registerUpdateMdHandle()
     registerDeleteMdHandle()
     registerCommentHandler()
+    registerSearchHandle()
+    registerNotifyHandle()
 
     // FileServer
     http.Handle("/css/", http.FileServer(http.Dir("resource/web")))
