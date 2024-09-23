@@ -50,9 +50,13 @@ func NewArticleByItem(atitle, atype, alabel, authorId string) (*Article, error) 
 }
 
 func (a *Article) isInCategory() bool {
+    return IsInCategory(a.Type)
+}
+
+func IsInCategory(s string) bool {
     c := conf.Category()
     for i := range c {
-        if a.Type == c[i] {
+        if s == c[i] {
             return true
         }
     }

@@ -72,6 +72,11 @@ li:hover {
     color: #999; /* 作者颜色 */
 }
 
+.null-padding {
+    display: fixed;
+    display-direction: column;
+    min-height: 100vh;
+}
 .footer {
     margin-top: 4em;
     background-color: #343a40; /* 深色背景 */

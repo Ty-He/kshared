@@ -1,5 +1,5 @@
 {{ define "category" }}
-    <div class="container">
+    <div class="container null-padding">
         {{ range $key, $value := . }}
         <div class="row">
             <div class="col-md-8 col-md-offset-2 content-custom">
@@ -21,8 +21,8 @@
                     </tbody>
                 </table>
             </div>
-        <div class="separate"></div>
         </div>
+        <div class="separate"></div>
         {{ end }}
     </div>
 {{ end }}

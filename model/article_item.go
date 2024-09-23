@@ -50,7 +50,7 @@ func GetTotalArticle() ([]*ArticleItem, error) {
 }
 
 // get a map: category -> items
-func FilterArticleByCategory(category []string) (map[string][]*ArticleItem, error) {
+func FilterArticleByCategory(category ...string) (map[string][]*ArticleItem, error) {
     query := `select article.id, title, name, update_time
         from article join author on author_id = author.id
         where type = ?;`

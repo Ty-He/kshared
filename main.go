@@ -37,6 +37,7 @@ func main() {
     signal.Notify(signSet, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
     <-signSet
+    fmt.Println(" Catch exiting signal.")
     
     ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
     defer cancel()

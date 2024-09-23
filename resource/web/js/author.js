@@ -143,3 +143,20 @@ async function searchByTag() {
     document.write(html);
     document.close();
 }
+
+// delete cookie instantly
+function deleteAllCookies() {
+    const uid = getCookie('uid');
+    if (uid.length == 0) {
+        alert('Not currently logged in.')
+        return;
+    }
+    const cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+        const eqIdx = cookie.indexOf('=');
+        const name = eqIdx > -1 ? cookie.substr(0, eqIdx) : cookie;
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 JMT; Path=/";
+    }
+    alert('Success logout.');
+    document.getElementById('home').click();
+}
